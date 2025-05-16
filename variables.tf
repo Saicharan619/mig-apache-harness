@@ -1,5 +1,5 @@
 variable "project" {
-  default = "your-gcp-project-id"
+  default = "	saicharan-457910"
 }
 
 variable "region" {
