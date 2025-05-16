@@ -5,7 +5,7 @@ provider "google" {
 }
 
 resource "google_compute_instance_template" "default" {
-  name_prefix = "mig-template-"
+  name_prefix = "centos-mig-template-"
   region      = var.region
 
   properties {
@@ -14,7 +14,7 @@ resource "google_compute_instance_template" "default" {
     disks {
       auto_delete  = true
       boot         = true
-      source_image = "debian-cloud/debian-11"
+      source_image = "centos-cloud/centos-stream-9"
     }
 
     network_interfaces {
@@ -29,8 +29,8 @@ resource "google_compute_instance_template" "default" {
 }
 
 resource "google_compute_instance_group_manager" "default" {
-  name               = "apache-mig"
-  base_instance_name = "apache-instance"
+  name               = "centos-apache-mig"
+  base_instance_name = "centos-instance"
   zone               = var.zone
   version {
     instance_template = google_compute_instance_template.default.id
