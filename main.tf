@@ -6,35 +6,37 @@ provider "google" {
 
 resource "google_compute_instance_template" "default" {
   name_prefix = "centos-mig-template-"
-  region      = var.region
+  machine_type = "e2-micro"
+  region       = var.region
 
-  properties {
-    machine_type = "e2-micro"
+  tags = ["http-server"]
 
-    disks {
-      auto_delete  = true
-      boot         = true
-      source_image = "centos-cloud/centos-stream-9"
-    }
-
-    network_interfaces {
-      network = "default"
-      access_config {}
-    }
-
-    metadata_startup_script = file("startup-script.sh")
-
-    tags = ["http-server"]
+  disk {
+    auto_delete  = true
+    boot         = true
+    source_image = "centos-cloud/centos-stream-9"
   }
+
+  network_interface {
+    network = "default"
+
+    access_config {
+      // Enables external IP
+    }
+  }
+
+  metadata_startup_script = file("startup-script.sh")
 }
 
 resource "google_compute_instance_group_manager" "default" {
   name               = "centos-apache-mig"
   base_instance_name = "centos-instance"
   zone               = var.zone
+
   version {
     instance_template = google_compute_instance_template.default.id
   }
+
   target_size = 2
 }
 
