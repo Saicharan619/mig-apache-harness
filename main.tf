@@ -35,7 +35,7 @@ resource "google_compute_instance_group_manager" "default" {
   version {
     instance_template = google_compute_instance_template.default.id
   }
-  target_size = 1
+  target_size = 2
 }
 
 resource "google_compute_firewall" "http" {
